@@ -13,6 +13,9 @@ export async function GET() {
     const tagCounts: { [key: string]: number } = {};
     
     for (const tag of tags) {
+      
+      if (!tag || tag.trim() === '') continue;
+      
       const count = await Bookmark.countDocuments({ tags: tag });
       tagCounts[tag] = count;
     }

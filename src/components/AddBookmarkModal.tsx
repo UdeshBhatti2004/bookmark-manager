@@ -50,14 +50,18 @@ export default function AddBookmarkModal({
     setError('');
   };
 
+  const addCurrentTag = () => {
+    const newTag = tagInput.trim().toLowerCase();
+    if (newTag && !tags.includes(newTag) && tags.length < 10) {
+      setTags([...tags, newTag]);
+      setTagInput('');
+    }
+  };
+
   const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' || e.key === ',') {
       e.preventDefault();
-      const newTag = tagInput.trim().toLowerCase();
-      if (newTag && !tags.includes(newTag) && tags.length < 10) {
-        setTags([...tags, newTag]);
-        setTagInput('');
-      }
+      addCurrentTag();
     }
   };
 
@@ -70,16 +74,23 @@ export default function AddBookmarkModal({
     setError('');
     setLoading(true);
 
+  
+    const finalTags = [...tags];
+    const currentTag = tagInput.trim().toLowerCase();
+    if (currentTag && !finalTags.includes(currentTag) && finalTags.length < 10) {
+      finalTags.push(currentTag);
+    }
+
     try {
       if (isEditing && editingBookmark?._id && onUpdate) {
-        await onUpdate(editingBookmark._id, title, description, tags);
+        await onUpdate(editingBookmark._id, title, description, finalTags);
       } else {
         if (!url) {
           setError('Please enter a URL');
           setLoading(false);
           return;
         }
-        await onAdd(url, tags);
+        await onAdd(url, finalTags);
       }
       resetForm();
       onClose();
@@ -188,21 +199,28 @@ export default function AddBookmarkModal({
                   value={tagInput}
                   onChange={(e) => setTagInput(e.target.value)}
                   onKeyDown={handleAddTag}
-                  placeholder="Add tags (press Enter or comma)"
+                  onBlur={addCurrentTag}
+                  placeholder="Type and press Enter to add tags"
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
                   disabled={loading || tags.length >= 10}
                 />
               </div>
               <p className="text-xs text-gray-500 mt-1">
-                Press Enter or comma to add tag (max 10)
+                {tags.length >= 10 
+                  ? '⚠️ Maximum 10 tags reached'
+                  : 'Press Enter, comma, or click outside to add tag (max 10)'
+                }
               </p>
 
               
               {tags.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-3">
                   {tags.map((tag) => (
-                    <span
+                    <motion.span
                       key={tag}
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      exit={{ scale: 0 }}
                       className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-100 text-blue-700 rounded-full text-sm"
                     >
                       {tag}
@@ -213,8 +231,15 @@ export default function AddBookmarkModal({
                       >
                         <X className="w-3 h-3" />
                       </button>
-                    </span>
+                    </motion.span>
                   ))}
+                </div>
+              )}
+
+              
+              {tagInput.trim() && tags.length < 10 && (
+                <div className="mt-2 text-xs text-blue-600 flex items-center gap-1">
+                  <span>💡 Press Enter to add "{tagInput.trim()}"</span>
                 </div>
               )}
             </div>

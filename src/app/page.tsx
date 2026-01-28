@@ -135,33 +135,36 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       
-      <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-40 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl">
-                <BookmarkIcon className="w-8 h-8 text-white" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Bookmark Manager
-                </h1>
-                <p className="text-sm text-gray-600">
-                  {bookmarks.length} bookmark{bookmarks.length !== 1 ? 's' : ''} saved
-                </p>
-              </div>
-            </div>
-
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl font-medium"
-            >
-              <Plus className="w-5 h-5" />
-              Add Bookmark
-            </button>
-          </div>
+     <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-40 shadow-sm">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      {/* Left side - Logo and Title */}
+      <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+        <div className="p-1.5 sm:p-2 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg sm:rounded-xl flex-shrink-0">
+          <BookmarkIcon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
         </div>
-      </header>
+        <div className="min-w-0 flex-1">
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent truncate">
+            Bookmark Manager
+          </h1>
+          <p className="text-xs sm:text-sm text-gray-600">
+            {bookmarks.length} bookmark{bookmarks.length !== 1 ? 's' : ''} saved
+          </p>
+        </div>
+      </div>
+
+      {/* Right side - Add Button */}
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg sm:rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl font-medium text-sm sm:text-base whitespace-nowrap flex-shrink-0"
+      >
+        <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
+        <span className="hidden xs:inline">Add Bookmark</span>
+        <span className="xs:hidden">Add Bookmark</span>
+      </button>
+    </div>
+  </div>
+</header>
 
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

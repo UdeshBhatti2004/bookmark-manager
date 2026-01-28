@@ -3,6 +3,7 @@ import connectDB from '@/lib/mongodb';
 import Bookmark from '@/models/Bookmark';
 import { fetchMetadata, isValidUrl } from '@/lib/scraper';
 
+
 export async function GET(req: NextRequest) {
   try {
     await connectDB();
@@ -22,7 +23,7 @@ export async function GET(req: NextRequest) {
       ];
     }
 
-    
+   
     if (tag) {
       query.tags = tag;
     }
@@ -71,13 +72,18 @@ export async function POST(req: NextRequest) {
     const metadata = await fetchMetadata(url);
 
     
+    const cleanedTags = tags
+      .map((tag: string) => tag.toLowerCase().trim())
+      .filter((tag: string) => tag.length > 0); // Remove empty tags
+
+    
     const bookmark = await Bookmark.create({
       url,
       title: metadata.title,
       description: metadata.description,
       favicon: metadata.favicon,
       image: metadata.image,
-      tags: tags.map((tag: string) => tag.toLowerCase().trim()),
+      tags: cleanedTags,
     });
 
     return NextResponse.json({
@@ -151,7 +157,12 @@ export async function PATCH(req: NextRequest) {
     const updateData: any = {};
     if (title) updateData.title = title;
     if (description !== undefined) updateData.description = description;
-    if (tags) updateData.tags = tags.map((tag: string) => tag.toLowerCase().trim());
+    if (tags) {
+      
+      updateData.tags = tags
+        .map((tag: string) => tag.toLowerCase().trim())
+        .filter((tag: string) => tag.length > 0); 
+    }
 
     const bookmark = await Bookmark.findByIdAndUpdate(
       id,

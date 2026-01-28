@@ -26,8 +26,7 @@ function getTagColor(tag: string): string {
 }
 
 export default function TagFilter({ tags, selectedTag, onTagSelect }: TagFilterProps) {
-  if (tags.length === 0) return null;
-
+  
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
       <div className="flex items-center gap-2 mb-4">
@@ -35,46 +34,54 @@ export default function TagFilter({ tags, selectedTag, onTagSelect }: TagFilterP
         <h3 className="font-semibold text-gray-900">Filter by Tags</h3>
       </div>
 
-      <div className="flex flex-wrap gap-2">
-        
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => onTagSelect(null)}
-          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-            selectedTag === null
-              ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-          }`}
-        >
-          All
-        </motion.button>
-
-        
-        {tags.map(({ tag, count }) => (
+      {tags.length === 0 ? (
+        <div className="text-center py-4">
+          <p className="text-sm text-gray-500">
+            No tags yet. Add tags to your bookmarks to filter them!
+          </p>
+        </div>
+      ) : (
+        <div className="flex flex-wrap gap-2">
+          
           <motion.button
-            key={tag}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => onTagSelect(tag === selectedTag ? null : tag)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${
-              tag === selectedTag
+            onClick={() => onTagSelect(null)}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              selectedTag === null
                 ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md'
-                : getTagColor(tag)
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
-            {tag}
-            <span
-              className={`text-xs px-1.5 py-0.5 rounded-full ${
-                tag === selectedTag ? 'bg-white/20' : 'bg-black/10'
+            All
+          </motion.button>
+
+          
+          {tags.map(({ tag, count }) => (
+            <motion.button
+              key={tag}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => onTagSelect(tag === selectedTag ? null : tag)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${
+                tag === selectedTag
+                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md'
+                  : getTagColor(tag)
               }`}
             >
-              {count}
-            </span>
-            {tag === selectedTag && <X className="w-3.5 h-3.5 ml-0.5" />}
-          </motion.button>
-        ))}
-      </div>
+              {tag}
+              <span
+                className={`text-xs px-1.5 py-0.5 rounded-full ${
+                  tag === selectedTag ? 'bg-white/20' : 'bg-black/10'
+                }`}
+              >
+                {count}
+              </span>
+              {tag === selectedTag && <X className="w-3.5 h-3.5 ml-0.5" />}
+            </motion.button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
