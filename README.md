@@ -62,10 +62,10 @@ Create a `.env.local` file in the root directory:
 
 ```env
 # MongoDB Connection String
-MONGODB_URI=mongodb://localhost:27017/bookmark-manager
+MONGODB_URI=your_mongodb_connection_string_here
 
 # Or use MongoDB Atlas (cloud)
-# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/bookmark-manager?retryWrites=true&w=majority
+# MONGODB_URI=your_mongodb_connection_string_here
 
 # Next.js
 NEXT_PUBLIC_APP_URL=http://localhost:3000
